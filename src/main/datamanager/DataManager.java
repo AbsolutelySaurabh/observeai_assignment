@@ -3,15 +3,16 @@ package main.datamanager; /**
  */
 
 import main.constant.Constants;
-import main.data.Data;
+import main.data.UserData;
+import main.data.ShortUrl;
 
 import java.util.HashMap;
 
 public class DataManager {
 
     private static DataManager dataManager;
-    public static HashMap<Integer, Data> clientDataMap;
-    public static HashMap<String, String> shortToLongUrlMap;
+    public static HashMap<Integer, UserData> clientDataMap;
+    public static HashMap<String, ShortUrl> shortToLongUrlMap;
     private static int longUrlId;
 
     public static DataManager getInstance(){
@@ -31,8 +32,8 @@ public class DataManager {
 
     public void init(){
         longUrlId = Constants.dbRowId;
-        clientDataMap = new HashMap<Integer, Data>();
-        shortToLongUrlMap = new HashMap<String, String>();
+        clientDataMap = new HashMap<Integer, UserData>();
+        shortToLongUrlMap = new HashMap<String, ShortUrl>();
     }
 
     public boolean isLongUrlAlreadyPresentForClient(String longUrl, int clientId){
@@ -54,7 +55,7 @@ public class DataManager {
         return false;
     }
 
-    public String getLongUrlForShort(String shortUrl){
+    public ShortUrl getLongUrlForShort(String shortUrl){
         return shortToLongUrlMap.get(shortUrl);
     }
 
@@ -63,13 +64,25 @@ public class DataManager {
     }
 
     public static void saveShortUrlToClientMap(int clientId, String longUrl, String shortUrl){
-        Data data = new Data(clientId);
+        UserData data = new UserData(clientId);
         data.longToShortUrlMap.put(longUrl, shortUrl);
         clientDataMap.put(clientId, data);
     }
 
     public static void saveShortToLongUrlMap(String shortUrl, String longUrl){
-        shortToLongUrlMap.put(shortUrl, longUrl);
+        ShortUrl shortUrlObj = new ShortUrl(shortUrl, longUrl);
+        shortToLongUrlMap.put(shortUrl, shortUrlObj);
     }
+
+    public void updateShorturlStats(String shortUrl){
+        if(!dataManager.isShortUrlExist(shortUrl)){
+            return;
+        }
+        ShortUrl obj = shortToLongUrlMap.get(shortUrl);
+        obj.updateHitCount();
+        shortToLongUrlMap.put(shortUrl, obj);
+//        Constants.print(String.valueOf(shortToLongUrlMap.get(shortUrl).getHitCount()));
+    }
+
 
 }

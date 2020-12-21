@@ -4,6 +4,7 @@
 package main.service;
 
 import main.constant.Constants;
+import main.data.ShortUrl;
 import main.datamanager.DataManager;
 
 public class LongToShortUrlService {
@@ -62,9 +63,10 @@ public class LongToShortUrlService {
         if(!dataManager.isShortUrlExist(shortUrl)){
             return null;
         }
-        String originalUrl = dataManager.getLongUrlForShort(shortUrl);
+        ShortUrl shortUrlObj = dataManager.getLongUrlForShort(shortUrl);
+        String originalUrl = shortUrlObj.getLongUrl();
+        dataManager.updateShorturlStats(shortUrl);
         Constants.print(originalUrl);
         return originalUrl;
     }
-
 }

@@ -42,7 +42,6 @@ public class MainTest{
         service.getShortenedURL("twitter.com", 2);
         service.getOriginalURL("dnh");
         service.getShortenedURL("twitter.com", 2);
-
         assertEquals("dnh\ndni\ndnj\ngithub.com\ndnj", outContent.toString().trim());
     }
 
