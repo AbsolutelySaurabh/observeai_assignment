@@ -1,5 +1,7 @@
-import constant.Constants;
-import service.LongToShortUrlService;
+package main;
+
+import main.constant.Constants;
+import main.service.LongToShortUrlService;
 
 import java.util.Scanner;
 
@@ -18,11 +20,11 @@ public class Main {
         LongToShortUrlService service = LongToShortUrlService.getInstance();
         service.init();
 
-        while(key == -1){
+        while(key != -1){
 
+            Constants.print("Enter API number");
             int apiNo = s.nextInt();
             if(apiNo == 1){
-
                 s.nextLine();
                 Constants.print("Enter Long Url: ");
                 String longUrl = s.nextLine();
@@ -35,9 +37,16 @@ public class Main {
                 Constants.print("Enter Short Url: ");
                 String shortUrl = s.nextLine();
                 Constants.print("shortUrl: " + shortUrl);
-                Constants.print("Original url:"  + service.getOriginalURL(shortUrl));
+
+                String originalUrl = service.getOriginalURL(shortUrl);
+                if(originalUrl == null){
+                    Constants.print(Constants.SHORT_URL_NOT_EXIST_ERROR);
+                }else {
+                    Constants.print("Original url:" + originalUrl);
+                }
 
             }
+            Constants.print("1 INPUT  -1 EXIT");
             key = s.nextInt();
         }
     }

@@ -1,10 +1,10 @@
 /**
  * @author AbsolutelySaurabh
  */
-package service;
+package main.service;
 
-import constant.Constants;
-import datamanager.DataManager;
+import main.constant.Constants;
+import main.datamanager.DataManager;
 
 public class LongToShortUrlService {
 
@@ -21,6 +21,7 @@ public class LongToShortUrlService {
 
     public void init(){
         dataManager = DataManager.getInstance();
+        dataManager.init();
     }
 
     private String computeShortUrl(int dbRowId){
@@ -34,28 +35,36 @@ public class LongToShortUrlService {
             shorturl.append(map[dbRowId % 62]);
             dbRowId = dbRowId / 62;
         }
-        Constants.print(shorturl.toString());
+//        Constants.print(shorturl.toString());
         return shorturl.reverse().toString();
     }
 
     public String getShortenedURL(String longUrl, int clientId){
 
+        String shortUrl = null;
         if(dataManager.isLongUrlAlreadyPresentForClient(longUrl, clientId)){
-            return dataManager.getShortUrlForClient(clientId, longUrl);
+//            Constants.print("LONG URL ALREADY!!");
+            shortUrl = dataManager.getShortUrlForClient(clientId, longUrl);
+            Constants.print(shortUrl);
+            return shortUrl;
         }
         int dbRowId = dataManager.getLongUrlId();
-        String shortUrl = computeShortUrl(dbRowId);
+        shortUrl = computeShortUrl(dbRowId);
         dataManager.saveShortUrlToClientMap(clientId, longUrl, shortUrl);
         dataManager.saveShortToLongUrlMap(shortUrl, longUrl);
+        dataManager.incrementLongUrlId();
+
+        Constants.print(shortUrl);
         return shortUrl;
     }
 
     public String getOriginalURL(String shortUrl){
         if(!dataManager.isShortUrlExist(shortUrl)){
-            Constants.print("ERROR: Short Url doesn't exist in db");
             return null;
         }
-        return dataManager.getLongUrlForShort(shortUrl);
+        String originalUrl = dataManager.getLongUrlForShort(shortUrl);
+        Constants.print(originalUrl);
+        return originalUrl;
     }
 
 }

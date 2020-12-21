@@ -1,9 +1,9 @@
-package datamanager; /**
+package main.datamanager; /**
  * @author AbsolutelySaurabh
  */
 
-import constant.Constants;
-import data.Data;
+import main.constant.Constants;
+import main.data.Data;
 
 import java.util.HashMap;
 
@@ -29,13 +29,18 @@ public class DataManager {
         longUrlId++;
     }
 
-    private void init(){
+    public void init(){
         longUrlId = Constants.dbRowId;
         clientDataMap = new HashMap<Integer, Data>();
         shortToLongUrlMap = new HashMap<String, String>();
     }
 
     public boolean isLongUrlAlreadyPresentForClient(String longUrl, int clientId){
+
+        if(clientDataMap.get(clientId) == null){
+            return false;
+        }
+
         if(clientDataMap.get(clientId).longToShortUrlMap.get(longUrl)!=null){
             return true;
         }

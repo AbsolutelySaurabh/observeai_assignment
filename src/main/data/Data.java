@@ -1,7 +1,7 @@
 /**
  * @author AbsolutelySaurabh
  */
-package data;
+package main.data;
 
 import java.util.HashMap;
 
