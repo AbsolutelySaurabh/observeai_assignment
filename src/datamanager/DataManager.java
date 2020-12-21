@@ -10,7 +10,7 @@ import java.util.HashMap;
 public class DataManager {
 
     private static DataManager dataManager;
-    public static HashMap<String, Data> clientDataMap;
+    public static HashMap<Integer, Data> clientDataMap;
     public static HashMap<String, String> shortToLongUrlMap;
     private static int longUrlId;
 
@@ -31,11 +31,11 @@ public class DataManager {
 
     private void init(){
         longUrlId = Constants.dbRowId;
-        clientDataMap = new HashMap<String, Data>();
+        clientDataMap = new HashMap<Integer, Data>();
         shortToLongUrlMap = new HashMap<String, String>();
     }
 
-    public boolean isLongUrlAlreadyPresentForClient(String longUrl, String clientId){
+    public boolean isLongUrlAlreadyPresentForClient(String longUrl, int clientId){
         if(clientDataMap.get(clientId).longToShortUrlMap.get(longUrl)!=null){
             return true;
         }
@@ -53,11 +53,11 @@ public class DataManager {
         return shortToLongUrlMap.get(shortUrl);
     }
 
-    public String getShortUrlForClient(String clientId, String longUrl){
+    public String getShortUrlForClient(int clientId, String longUrl){
        return clientDataMap.get(clientId).longToShortUrlMap.get(longUrl);
     }
 
-    public static void saveShortUrlToClientMap(String clientId, String longUrl, String shortUrl){
+    public static void saveShortUrlToClientMap(int clientId, String longUrl, String shortUrl){
         Data data = new Data(clientId);
         data.longToShortUrlMap.put(longUrl, shortUrl);
         clientDataMap.put(clientId, data);

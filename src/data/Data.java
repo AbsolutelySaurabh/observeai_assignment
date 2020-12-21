@@ -7,10 +7,10 @@ import java.util.HashMap;
 
 public class Data {
 
-    public String clientId;
+    public int clientId;
     public HashMap<String, String> longToShortUrlMap;
     
-    public Data(String clientId) {
+    public Data(int clientId) {
         this.clientId = clientId;
         this.longToShortUrlMap = new HashMap<>();
     }

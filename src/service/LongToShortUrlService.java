@@ -38,7 +38,7 @@ public class LongToShortUrlService {
         return shorturl.reverse().toString();
     }
 
-    public String getShortenedURL(String longUrl, String clientId){
+    public String getShortenedURL(String longUrl, int clientId){
 
         if(dataManager.isLongUrlAlreadyPresentForClient(longUrl, clientId)){
             return dataManager.getShortUrlForClient(clientId, longUrl);
