@@ -21,6 +21,14 @@ public class DataManager {
         return dataManager;
     }
 
+    public int getLongUrlId(){
+        return longUrlId;
+    }
+
+    public void incrementLongUrlId(){
+        longUrlId++;
+    }
+
     private static void init(){
         longUrlId = 1234;
         dataManager = new DataManager();
@@ -28,8 +36,8 @@ public class DataManager {
         shorttoLongUrlMap = new HashMap<String, String>();
     }
 
-    public boolean isLongUrlAlreadyPresentForClient(String longUrl){
-        if(clientDataMap.get(longUrl)!=null){
+    public boolean isLongUrlAlreadyPresentForClient(String longUrl, String clientId){
+        if(clientDataMap.get(clientId).longToShortUrlMap.get(longUrl)!=null){
             return true;
         }
         return false;
