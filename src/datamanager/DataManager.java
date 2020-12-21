@@ -1,8 +1,8 @@
-/**
+package datamanager; /**
  * @author AbsolutelySaurabh
  */
-package datamanager;
 
+import constant.Constants;
 import data.Data;
 
 import java.util.HashMap;
@@ -11,12 +11,12 @@ public class DataManager {
 
     private static DataManager dataManager;
     public static HashMap<String, Data> clientDataMap;
-    public static HashMap<String, String> shorttoLongUrlMap;
+    public static HashMap<String, String> shortToLongUrlMap;
     private static int longUrlId;
 
     public static DataManager getInstance(){
         if(dataManager == null){
-            init();
+            dataManager = new DataManager();
         }
         return dataManager;
     }
@@ -29,11 +29,10 @@ public class DataManager {
         longUrlId++;
     }
 
-    private static void init(){
-        longUrlId = 1234;
-        dataManager = new DataManager();
+    private void init(){
+        longUrlId = Constants.dbRowId;
         clientDataMap = new HashMap<String, Data>();
-        shorttoLongUrlMap = new HashMap<String, String>();
+        shortToLongUrlMap = new HashMap<String, String>();
     }
 
     public boolean isLongUrlAlreadyPresentForClient(String longUrl, String clientId){
@@ -43,14 +42,29 @@ public class DataManager {
         return false;
     }
 
+    public boolean isShortUrlExist(String shortUrl){
+        if(shortToLongUrlMap.get(shortUrl)!= null){
+            return true;
+        }
+        return false;
+    }
+
+    public String getLongUrlForShort(String shortUrl){
+        return shortToLongUrlMap.get(shortUrl);
+    }
+
     public String getShortUrlForClient(String clientId, String longUrl){
        return clientDataMap.get(clientId).longToShortUrlMap.get(longUrl);
     }
 
-    public static void saveShortUrlToClient(String clientId, String longUrl, String shortUrl){
+    public static void saveShortUrlToClientMap(String clientId, String longUrl, String shortUrl){
         Data data = new Data(clientId);
         data.longToShortUrlMap.put(longUrl, shortUrl);
         clientDataMap.put(clientId, data);
+    }
+
+    public static void saveShortToLongUrlMap(String shortUrl, String longUrl){
+        shortToLongUrlMap.put(shortUrl, longUrl);
     }
 
 }

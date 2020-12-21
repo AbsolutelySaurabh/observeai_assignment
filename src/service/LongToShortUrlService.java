@@ -3,6 +3,7 @@
  */
 package service;
 
+import constant.Constants;
 import datamanager.DataManager;
 
 public class LongToShortUrlService {
@@ -23,18 +24,38 @@ public class LongToShortUrlService {
     }
 
     private String computeShortUrl(int dbRowId){
-        return null;
+
+        char map[] = Constants.map;
+        StringBuffer shorturl = new StringBuffer();
+
+        // Convert given integer id to a base 62 number
+        while (dbRowId > 0)
+        {
+            shorturl.append(map[dbRowId % 62]);
+            dbRowId = dbRowId / 62;
+        }
+        Constants.print(shorturl.toString());
+        return shorturl.reverse().toString();
     }
 
-    public String convertLongtoShortUrl(String longUrl, String clientId){
+    public String getShortenedURL(String longUrl, String clientId){
 
         if(dataManager.isLongUrlAlreadyPresentForClient(longUrl, clientId)){
             return dataManager.getShortUrlForClient(clientId, longUrl);
         }
         int dbRowId = dataManager.getLongUrlId();
         String shortUrl = computeShortUrl(dbRowId);
-        dataManager.saveShortUrlToClient(clientId, longUrl, shortUrl);
+        dataManager.saveShortUrlToClientMap(clientId, longUrl, shortUrl);
+        dataManager.saveShortToLongUrlMap(shortUrl, longUrl);
         return shortUrl;
+    }
+
+    public String getOriginalURL(String shortUrl){
+        if(!dataManager.isShortUrlExist(shortUrl)){
+            Constants.print("ERROR: Short Url doesn't exist in db");
+            return null;
+        }
+        return dataManager.getLongUrlForShort(shortUrl);
     }
 
 }
